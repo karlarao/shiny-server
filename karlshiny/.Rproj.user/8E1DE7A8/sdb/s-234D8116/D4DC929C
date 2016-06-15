@@ -1,0 +1,17 @@
+{
+    "contents" : "\n# This is the user-interface definition of a Shiny web application.\n# You can find out more about building applications with Shiny here:\n#\n# http://shiny.rstudio.com\n#\n\nlibrary(shiny)\nlibrary(ggplot2)\ndiamonds2 <- read.csv(\"diamonds2.csv\")\n\nshinyUI(fluidPage(\n\n  h1(\"I'm so shiny...\"),\n  \n  h3(\"viz histogram with summary output\"),\n  # histogram bin slider\n  sliderInput(\"num\",\"Choose a number\",1,100,50),\n  \n  # one button\n  # actionButton(\"go\",\"Update\"),\n  \n  # two buttons\n  actionButton(\"normal\",\"Normal Data\"),\n  actionButton(\"uniform\",\"Uniform Data\"),\n  \n  # the histogram plot and summary\n  plotOutput(\"hist\"),\n  verbatimTextOutput(\"summary\"),\n  \n  # real time clock \n  h3(\"real time clock\"),\n  verbatimTextOutput(\"clock\"),\n  \n  # line graph refresh every data update\n  h3(\"line graph auto refresh every data update\"),\n  plotOutput(\"line\"),\n  \n  # interactive viz\n  h3(\"viz points on the bottom will show as red when data is selected\"),\n  selectInput(\"yVar\", \"Select Y\", \n              choices = names(diamonds2), selected = \"cut\"),  \n  selectInput(\"xVar\", \"Select X\", \n              choices = names(diamonds2), selected = \"price\"),\n  fluidRow(\n    column(3, \n           h4(\"Click\"),\n           verbatimTextOutput(\"clickVals\")\n    ),\n    column(3, \n           h4(\"Double Click\"),\n           verbatimTextOutput(\"dblclickVals\")\n    ),\n    column(3, \n           h4(\"Hover\"),\n           verbatimTextOutput(\"hoverVals\")\n    ),\n    column(3, \n           h4(\"Brush\"),\n           verbatimTextOutput(\"brushVals\")\n    )\n  ),  \n  plotOutput(\"plot1\",\n             click = \"click\",\n             dblclick = \"dblclick\",\n             hover = \"hover\",\n             brush = \"brush\"),\n  \n  # viz points will show as red when plot1 is highlighted\n  plotOutput(\"plot2\"),\n  \n  # show all rows\n  verbatimTextOutput(\"info\")\n\n  \n  \n))\n",
+    "created" : 1465837768662.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2883663597",
+    "id" : "D4DC929C",
+    "lastKnownWriteTime" : 1465852535,
+    "path" : "E:/GitHub/code_ninja/r/shiny/karlshiny/ui.R",
+    "project_path" : "ui.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

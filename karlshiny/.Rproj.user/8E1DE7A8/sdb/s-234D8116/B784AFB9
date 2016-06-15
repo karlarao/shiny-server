@@ -1,0 +1,17 @@
+{
+    "contents" : "\n# This is the server logic for a Shiny web application.\n# You can find out more about building applications with Shiny here:\n#\n# http://shiny.rstudio.com\n#\n\nlibrary(shiny)\nlibrary(ggplot2)\n\n\nshinyServer(function(input, output, session) {\n  \n  # example 1: reactive() \n  # data <- reactive({\n  #   rnorm(input$num)\n  # })\n  \n  # example 2: eventReactive() \n  # data <- eventReactive(input$go, {\n  #   rnorm(input$num)\n  # })\n  \n  # example 3: observe() \n  # observe({\n  #   rv$data <- rnorm(input$num)\n  # })\n  \n  # example 4: reactiveValues() + observeEvent()\n  rv <- reactiveValues(data=rnorm(50))\n  \n  observeEvent( input$normal, { \n    rv$data <- rnorm(input$num)\n  })\n  \n  observeEvent( input$uniform, {\n    rv$data <- runif(input$num)\n  })\n  \n  # example 5: invalidateLater()\n  clockdata <- reactive({\n    invalidateLater(1000)\n    Sys.time()\n  })\n\n  # plot and summary, should use data or rv$data\n  output$hist <- renderPlot({\n    hist(rv$data)\n  })\n  output$summary <- renderPrint({\n    summary(rv$data)\n  })\n  output$clock <- renderPrint({\n    invalidateLater(1000)\n    Sys.time()\n    # clockdata()   # another option is to call the reactive dataset\n  })\n  \n  # example 6: reactiveFileReader()\n  linedata <- reactiveFileReader(\n    intervalMillis = 5000,\n    session = session,\n    filePath = \"data.csv\",\n    readFunc = read.csv\n  )\n  output$line <- renderPlot({\n    plot(linedata(), type = \"l\")\n  })\n\n  # example 7: interactive viz\n  diamonds2 <- reactive({\n    read.csv(\"diamonds2.csv\")\n    #diamonds2 <- diamonds[sample(1:nrow(diamonds), 5000), ]\n  })\n  \n  output$plot1 <- renderPlot({\n    ggplot(diamonds2(), aes(x = diamonds2()[[input$xVar]], y = diamonds2()[[input$yVar]])) +\n      xlab(input$xVar) +\n      ylab(input$yVar) +\n      geom_count() +\n      theme_bw() \n  })\n  \n  # viz using qplot\n#   output$plot1 <- renderPlot({\n#     qplot(diamonds2[[input$xVar]], diamonds2[[input$yVar]], \n#           xlab = input$xVar, ylab = input$yVar, data = diamonds2)\n#   })\n  \n  output$clickVals <- renderText({\n    paste0(\"x=\", input$click$x, \"\\ny=\", input$click$y)\n  })\n  \n  output$dblclickVals <- renderText({\n    paste0(\"x=\", input$dblclick$x, \"\\ny=\", input$dblclick$y)\n  })\n  \n  output$hoverVals <- renderText({\n    paste0(\"x=\", input$hover$x, \"\\ny=\", input$hover$y)\n  })\n  \n  output$brushVals <- renderText({\n    paste0(\"xmin=\", input$brush$xmin, \"\\nymin=\", input$brush$ymin, \"\\nxmax=\", input$brush$xmax,\"\\nymax=\", input$brush$ymax)\n  })\n  \n  output$plot2 <- renderPlot({\n    ggplot(diamonds2(), aes(carat, price)) +\n      geom_point() +\n      theme_bw() + \n      geom_point(color = \"red\",\n                 data = brushedPoints(diamonds2(), input$brush, xvar = input$xVar, yvar = input$yVar))\n  })\n  \n  output$info <- renderPrint({\n    brushedPoints(diamonds2(), input$brush, xvar = input$xVar, yvar = input$yVar)\n  })\n    \n  \n})\n",
+    "created" : 1465837769741.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1961390363",
+    "id" : "B784AFB9",
+    "lastKnownWriteTime" : 1465852218,
+    "path" : "E:/GitHub/code_ninja/r/shiny/karlshiny/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "r_source"
+}
